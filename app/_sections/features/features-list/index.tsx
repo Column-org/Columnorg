@@ -1,8 +1,9 @@
-import { CheckIcon } from "@radix-ui/react-icons";
+"use client";
+import { motion } from "framer-motion";
+import { Check } from "lucide-react";
 import Image from "next/image";
 import { Section } from "../../../../common/section-wrapper";
 import { Heading } from "../../../../common/heading";
-import { DarkLightImage } from "../../../../common/dark-light-image";
 
 const FEATURE_LIST_DATA = {
   heading: {
@@ -68,22 +69,28 @@ export function FeaturesList() {
   
   return (
     <Section container="default" id="features">
-      <Heading subtitle={heading.subtitle} tag={heading.tag}>
-        <h4>{heading.title}</h4>
-      </Heading>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6 }}
+      >
+        <Heading subtitle={heading.subtitle} tag={heading.tag}>
+          {heading.title}
+        </Heading>
+      </motion.div>
+
       <div className="flex flex-col gap-6">
-        {items.map(({ image, ...item }) => (
-          <article
+        {items.map(({ image, ...item }, index) => (
+          <motion.article
             key={item._title}
-            className="flex min-h-96 w-full max-w-[380px] flex-col rounded-lg border border-[--border] bg-[--surface-secondary] p-px dark:border-[--dark-border] dark:bg-[--dark-surface-secondary] sm:max-w-full md:w-full md:flex-row md:odd:flex-row-reverse xl:gap-16"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, delay: index * 0.1 }}
+            className="flex min-h-96 w-full max-w-[380px] flex-col rounded-lg border border-[--border] bg-[--surface-secondary] p-px sm:max-w-full md:w-full md:flex-row md:odd:flex-row-reverse xl:gap-16"
           >
             <figure className="p-2 md:h-auto md:w-[360px] lg:w-[480px] xl:w-[560px]">
-              {/* <DarkLightImage
-                light={image}
-                className="block aspect-video h-[200px] w-full rounded-lg border border-[--border] object-cover dark:border-[--dark-border] md:h-full"
-                height={374}
-                width={560}
-              /> */}
                <div className="relative aspect-video h-[200px] w-full overflow-hidden rounded-lg bg-white md:h-full">
                  <Image
                    src={image.url}
@@ -95,10 +102,10 @@ export function FeaturesList() {
             </figure>
             <div className="flex flex-col gap-8 p-5 pt-6 md:flex-1 md:p-10">
               <div className="flex flex-col items-start gap-2">
-                <h5 className="text-2xl font-medium text-[--text-primary] dark:text-[--dark-text-primary] md:text-3xl">
+                <h5 className="text-2xl font-medium text-[--text-primary] md:text-3xl">
                   {item._title}
                 </h5>
-                <p className="font-normal text-[--text-secondary] dark:text-[--dark-text-secondary] md:text-lg">
+                <p className="font-normal text-[--text-secondary] md:text-lg">
                   {item.description}
                 </p>
               </div>
@@ -106,17 +113,17 @@ export function FeaturesList() {
                 {item.characteristics.items.map(({ _title }) => (
                   <li
                     key={_title}
-                    className="flex items-center gap-4 font-normal text-[--text-secondary] dark:text-[--dark-text-secondary]"
+                    className="flex items-center gap-4 font-normal text-[--text-secondary]"
                   >
-                    <span className="flex size-6 items-center justify-center rounded-full bg-[--surface-tertiary] dark:bg-[--dark-surface-tertiary]">
-                      <CheckIcon className="text-[--text-tertiary] dark:text-[--dark-text-tertiary]" />
+                    <span className="flex size-6 items-center justify-center rounded-full bg-[--surface-tertiary]">
+                      <Check className="size-4 text-[--text-tertiary]" />
                     </span>
                     {_title}
                   </li>
                 ))}
               </ul>
             </div>
-          </article>
+          </motion.article>
         ))}
       </div>
     </Section>

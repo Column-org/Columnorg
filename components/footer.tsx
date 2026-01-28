@@ -2,7 +2,6 @@ import { isExternalLink } from "@/app/_utils/links";
 import { ButtonLink } from "@/common/button";
 import Image from "next/image";
 import Link from "next/link";
-import { ThemeSwitcher } from "./theme-switcher";
 
 const STATIC_FOOTER_DATA = {
   copyright: `© ${new Date().getFullYear()} Column. All rights reserved.`,
@@ -21,8 +20,15 @@ const STATIC_FOOTER_DATA = {
 };
 
 export const Footer = () => (
-  <footer className="border-t border-[--border] py-16 dark:border-[--dark-border]">
-    <div className="container mx-auto grid grid-cols-2 grid-rows-[auto_auto_auto] place-items-start items-center gap-y-7 px-6 sm:grid-cols-[1fr_auto_1fr] sm:grid-rows-2 sm:gap-x-3 sm:gap-y-16">
+  <footer className="relative overflow-hidden bg-transparent py-16 text-black">
+    {/* Large watermark text - Positioned at bottom on mobile, center on desktop */}
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 top-0 flex items-end justify-center opacity-[0.03] sm:items-center">
+      <h2 className="select-none text-[20vw] font-black leading-none tracking-tighter sm:text-[15vw]">
+        Column
+      </h2>
+    </div>
+    
+    <div className="container relative z-10 mx-auto grid grid-cols-2 grid-rows-[auto_auto_auto] place-items-start items-center gap-y-7 px-6 sm:grid-cols-[1fr_auto_1fr] sm:grid-rows-2 sm:gap-x-3 sm:gap-y-16">
       <Link aria-label="Homepage" href="/">
         <Image
           src="/Column.png"
@@ -36,7 +42,7 @@ export const Footer = () => (
           <ButtonLink
             key={_title}
             unstyled
-            className="px-2 font-light tracking-tight text-[--text-tertiary] hover:text-[--text-primary] dark:text-[--dark-text-secondary] dark:hover:text-[--dark-text-primary]"
+            className="px-2 font-light tracking-tight text-black/60 hover:text-black"
             href={url ?? "#"}
             target={isExternalLink(url) ? "_blank" : "_self"}
           >
@@ -44,14 +50,8 @@ export const Footer = () => (
           </ButtonLink>
         ))}
       </nav>
-      <div className="col-start-2 row-start-1 flex items-center gap-3 self-center justify-self-end sm:col-span-1 sm:col-start-3 sm:row-start-1">
-        <p className="hidden text-[--text-tertiary] dark:text-[--dark-text-tertiary] sm:block">
-          Appearance
-        </p>
-        <ThemeSwitcher />
-      </div>
 
-      <p className="col-span-2 text-pretty text-sm text-[--text-tertiary] dark:text-[--dark-text-tertiary] sm:col-span-1">
+      <p className="col-span-2 text-pretty text-sm text-black/60 sm:col-span-1">
         {STATIC_FOOTER_DATA.copyright}
       </p>
 

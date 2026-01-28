@@ -1,3 +1,4 @@
+import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
 export const $section = cva("py-14 md:py-[72px] flex flex-col items-center gap-10 relative", {
@@ -14,6 +15,10 @@ export const $section = cva("py-14 md:py-[72px] flex flex-col items-center gap-1
 
 type SectionProps = React.AllHTMLAttributes<HTMLDivElement> & VariantProps<typeof $section>;
 
-export function Section({ className, container, ...props }: SectionProps) {
-  return <section className={$section({ className, container })} {...props} />;
-}
+export const Section = React.forwardRef<HTMLElement, SectionProps>(
+  ({ className, container, ...props }, ref) => {
+    return <section ref={ref} className={$section({ className, container })} {...props} />;
+  }
+);
+
+Section.displayName = "Section";

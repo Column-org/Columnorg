@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { Providers } from "./providers"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
+import { ScrollBackground } from "../components/scroll-background"
 
 const geist = Geist({
   subsets: ["latin"],
@@ -42,67 +43,27 @@ import { ErrorSuppressor } from "@/components/error-suppressor"
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                // Suppress specific extension errors immediately
-                const originalConsoleError = console.error;
-                console.error = function(...args) {
-                  const msg = args.join(" ");
-                  if (
-                    msg.includes("Failed to connect to MetaMask") ||
-                    msg.includes("Cannot redefine property: ethereum")
-                  ) {
-                    return;
-                  }
-                  originalConsoleError.apply(console, args);
-                };
-
-                window.addEventListener("error", function(event) {
-                  if (
-                    event.message?.includes("Failed to connect to MetaMask") ||
-                    event.message?.includes("Cannot redefine property: ethereum") ||
-                    event.error?.message?.includes("Failed to connect to MetaMask") ||
-                    event.error?.message?.includes("Cannot redefine property: ethereum")
-                  ) {
-                    event.stopImmediatePropagation();
-                    event.preventDefault();
-                  }
-                });
-
-                window.addEventListener("unhandledrejection", function(event) {
-                  if (
-                    event.reason?.message?.includes("Failed to connect to MetaMask") ||
-                    event.reason?.message?.includes("Cannot redefine property: ethereum") ||
-                     (typeof event.reason === "string" && (event.reason.includes("Failed to connect to MetaMask") || event.reason.includes("Cannot redefine property: ethereum")))
-                  ) {
-                    event.stopImmediatePropagation();
-                    event.preventDefault();
-                  }
-                });
-              })();
-            `,
-          }}
-        />
-      </head>
+      <head />
       <body
-        className={`min-h-svh max-w-[100vw] bg-[--surface-primary] text-[--text-primary] dark:bg-[--dark-surface-primary] dark:text-[--dark-text-primary] ${geistMono.variable} ${geist.variable} font-sans`}
+        className={`min-h-svh max-w-[100vw] bg-[--surface-primary] text-[--text-primary] ${geistMono.variable} ${geist.variable} font-sans`}
       >
         <ErrorSuppressor />
         <Providers>
           {/* Header */}
           <Header />
-          <main className="min-h-[calc(100svh-var(--header-height))]">{children}</main>
-          {/* Footer */}
-          <Footer />
+          <ScrollBackground>
+            <main className="min-h-[calc(100svh-var(--header-height))]">{children}</main>
+            {/* Footer */}
+            <Footer />
+          </ScrollBackground>
         </Providers>
       </body>
     </html>
   )
 }
 
-export const metadata = {
+import { Metadata } from "next"
+
+export const metadata: Metadata = {
   generator: "Next.js",
 }

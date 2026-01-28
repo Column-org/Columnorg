@@ -32,7 +32,7 @@ const CONTRAST_WARNING_COLORS: (keyof typeof colors)[] = [
 
 // Semantic color mappings
 const SEMANTIC_GRAYSCALE_MAPPING = {
-  // Light Mode
+  // Light Mode Only
   "text-primary": "950",
   "text-secondary": "600",
   "text-tertiary": "500",
@@ -40,20 +40,10 @@ const SEMANTIC_GRAYSCALE_MAPPING = {
   "surface-secondary": "100",
   "surface-tertiary": "200",
   border: "300",
-
-  // Dark Mode
-  "dark-text-primary": "50",
-  "dark-text-secondary": "400",
-  "dark-text-tertiary": "500",
-  "dark-surface-primary": "950",
-  "dark-surface-secondary": "900",
-  "dark-surface-tertiary": "800",
-  "dark-border": "800",
 } as const;
 
 const SEMANTIC_ACCENT_MAPPING = {
   control: "500",
-  "dark-control": "500",
 } as const;
 
 // Generate opacity levels: 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 100

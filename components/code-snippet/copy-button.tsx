@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "../../common/button";
-import { ClipboardCopyIcon, CheckIcon } from "@radix-ui/react-icons";
+import { Copy, Check } from "lucide-react";
 import * as React from "react";
 
 export function CopyButton({ code }: { code: string }) {
@@ -18,7 +18,7 @@ export function CopyButton({ code }: { code: string }) {
   return (
     <Button unstyled className="relative -ml-2 p-2" onClick={onCopy}>
       <span className="sr-only">Copy</span>
-      {copied ? <CheckIcon /> : <ClipboardCopyIcon />}
+      {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
     </Button>
   );
 }

@@ -1,5 +1,5 @@
 "use client";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { ChevronDown } from "lucide-react";
 import clsx from "clsx";
 
 import * as React from "react";
@@ -28,7 +28,7 @@ export function Select({
         </option>
         {children}
       </select>
-      <ChevronDownIcon className="absolute right-2 top-1/2 size-4 -translate-y-1/2 text-[--text-tertiary] dark:text-[--dark-text-tertiary]" />
+      <ChevronDown className="absolute right-2 top-1/2 size-4 -translate-y-1/2 text-[--text-tertiary] dark:text-[--dark-text-tertiary]" />
     </div>
   );
 }

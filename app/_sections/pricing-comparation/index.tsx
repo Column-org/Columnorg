@@ -1,4 +1,4 @@
-import { CheckCircledIcon, QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import { CheckCircle, CircleHelp } from "lucide-react";
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import clsx from "clsx";
@@ -21,11 +21,10 @@ export function PricingTable(props: PricingTableProps) {
   return (
     <Section className="xl:max-w-screen-xl" id="pricing">
       <Heading {...heading}>
-        <h4>{heading.title}</h4>
+        {heading.title}
       </Heading>
-      {/* Desktop pricing */}
       <table className="hidden w-full table-fixed lg:table">
-        <thead className="sticky top-[--header-height] bg-[--surface-primary] dark:bg-[--dark-surface-primary]">
+        <thead className="sticky top-[--header-height] bg-[--surface-primary]">
           <tr>
             <PlanHeader plan={null} />
             {plans.map((plan) => (
@@ -40,11 +39,11 @@ export function PricingTable(props: PricingTableProps) {
               {category.features.items.map((feature) => (
                 <tr
                   key={feature._id}
-                  className="border-b border-[--border-70] dark:border-[--dark-border-70]"
+                  className="border-b border-[--border-70]"
                 >
                   <FeatureTitle {...feature} />
                   {feature.values.items.map((value) => (
-                    <FeatureValue key={value._id} value={value} />
+                    <FeatureValue key={value.plan._id} value={value} />
                   ))}
                 </tr>
               ))}
@@ -115,13 +114,8 @@ function FeatureTitle(
       <TableCell align="start" as="div" type="primary">
         <p>{feature._title}</p>
         {feature.tooltip ? (
-          <SimpleTooltip
-            className="max-w-[320px]!"
-            content={feature.tooltip}
-            side="right"
-            sideOffset={4}
-          >
-            <QuestionMarkCircledIcon className="size-4 text-[--text-tertiary] dark:text-[--dark-text-tertiary]" />
+          <SimpleTooltip content={feature.tooltip}>
+            <CircleHelp className="size-4 shrink-0 text-[--text-tertiary]" />
           </SimpleTooltip>
         ) : null}
       </TableCell>
@@ -166,7 +160,7 @@ function PlanHeader({ plan }: { plan: PlanFragment | null }) {
     <th className="w-[1fr] pb-2 pt-6">
       <span className="flex flex-col items-center gap-3 font-normal">
         <div className="flex flex-col items-center gap-0.5">
-          <p className="text-base text-[--text-secondary] dark:text-[--dark-text-secondary] md:text-base">
+          <p className="text-base text-[--text-secondary] md:text-base">
             {plan._title}
           </p>
           <p className="text-lg font-medium">{plan.price}</p>
@@ -190,11 +184,9 @@ function FeatureValue({ value }: { value?: ValueFragment }) {
         {value ? (
           value.value?.__typename === "BooleanComponent" ? (
             value.value.boolean ? (
-              <span className="flex items-center justify-center rounded-full bg-[--success-10] bg-opacity-10 p-1.5">
-                <CheckCircledIcon className="size-5 text-[--success]" />
-              </span>
+              <CheckCircle className="size-5 text-[--success]" />
             ) : (
-              <span className="text-xl text-[--text-tertiary] dark:text-[--dark-text-tertiary]">
+              <span className="text-[--text-tertiary-50]">
                 &mdash;
               </span>
             )
@@ -216,6 +208,10 @@ export type PlanFragment = fragmentOn.infer<typeof planFragment>;
 const extractPlans = (categories: PricingTableProps["categories"]) => {
   const plans = new Map<string, PlanFragment>();
 
+  const getCategories = (category: any) =>
+    category.features.items.map((feature: any) =>
+      feature.values.items.find((value: any) => value.plan._id === activePlan),
+    );
   categories.items.forEach((category) => {
     category.features.items.forEach((feature) => {
       feature.values.items.forEach((value) => {

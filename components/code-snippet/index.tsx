@@ -4,7 +4,7 @@ import { fragmentOn } from "basehub";
 
 import { CopyButton } from "./copy-button";
 import { languagesIcons } from "./language";
-import { FileIcon } from "@radix-ui/react-icons";
+import { File } from "lucide-react";
 import s from "./code-snippet.module.css";
 
 export const codeSnippetFragment = fragmentOn("CodeSnippetComponent", {
@@ -26,7 +26,7 @@ export function CodeSnippet({ code, _id, _title = "Untitled" }: CodeSnippetFragm
           <header className={s.header}>
             <div className="flex items-center">
               <span className="mr-2 size-4">
-                {languagesIcons[code.language as Language] ?? <FileIcon />}
+                {languagesIcons[code.language as Language] ?? <File />}
               </span>
               <span className="text-[--text-secondary] dark:text-[--dark-text-secondary]">
                 {_title}

@@ -1,5 +1,5 @@
 import { RichText, type RichTextProps } from "basehub/react-rich-text";
-import { ChevronDownIcon } from "@radix-ui/react-icons";
+import { ChevronDown } from "lucide-react";
 import { cva } from "class-variance-authority";
 
 import { fragmentOn } from "basehub";
@@ -70,7 +70,7 @@ export function FaqRichtextComponent({ answer, _title }: FaqItemComponentRichTex
     <details className="group mb-2 flex flex-col gap-4 overflow-hidden rounded-lg border border-[--border] bg-[--surface-secondary] pb-1 dark:border-[--dark-border] dark:bg-[--dark-surface-secondary]">
       <summary className="outline-hidden focus-visible:ring-3 flex cursor-pointer items-start text-pretty rounded-md p-3 pb-2 pl-6 font-medium text-[--text-primary] ring-inset ring-[--accent-500] dark:text-[--dark-text-primary]">
         <span className="mt-1 flex w-8 pr-2">
-          <ChevronDownIcon className="transform group-open:rotate-180" />
+          <ChevronDown className="transform group-open:rotate-180" />
         </span>
         {_title}
       </summary>

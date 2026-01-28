@@ -1,6 +1,7 @@
+"use client";
+import { motion } from "framer-motion";
 import { Heading } from "../../../common/heading";
 import { Section } from "../../../common/section-wrapper";
-
 import { Accordion } from "./accordion";
 
 const FAQ_DATA = {
@@ -35,12 +36,25 @@ export function AccordionFaq() {
   const { heading, questions } = FAQ_DATA;
   return (
     <Section id="faq">
-      <Heading {...heading}>
-        <h4>{heading.title}</h4>
-      </Heading>
-      <div className="!mx-auto flex w-full !max-w-screen-md gap-8 lg:gap-14 lg:px-24">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <Heading {...heading}>
+          {heading.title}
+        </Heading>
+      </motion.div>
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8 }}
+        className="!mx-auto flex w-full !max-w-screen-md gap-8 lg:gap-14 lg:px-24"
+      >
         <Accordion items={questions.items} />
-      </div>
+      </motion.div>
     </Section>
   );
 }

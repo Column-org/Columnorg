@@ -1,10 +1,9 @@
 "use client";
 import * as React from "react";
 import { useSearch, SearchBox, type Hit } from "basehub/react-search";
-import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
+import { Search } from "lucide-react";
 import NextLink from "next/link";
 import clsx from "clsx";
-import * as Popover from "@radix-ui/react-popover";
 
 import { type AuthorFragment } from "../../lib/basehub/fragments";
 import { getArticleSlugFromSlugPath } from "../../lib/basehub/utils";
@@ -22,6 +21,7 @@ export function SearchContent({ _searchKey }: { _searchKey: string }) {
 
   const [open, setOpen] = React.useState(false);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     if (search.query) setOpen(true);
@@ -37,47 +37,43 @@ export function SearchContent({ _searchKey }: { _searchKey: string }) {
       }
     };
 
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
     document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
   return (
     <SearchBox.Root search={search}>
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Anchor>
-          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
-          <label
-            className={clsx(
-              "focus-within:ring-3 ml-auto flex w-full cursor-text items-center gap-x-1 rounded-full border border-[--border] px-3.5 py-2.5 !ring-[--accent-500] dark:border-[--dark-border] md:max-w-[280px]",
-            )}
-          >
-            <MagnifyingGlassIcon
-              className="pointer-events-none size-5 shrink-0 text-[--text-secondary] transition-colors duration-75 dark:text-[--dark-text-secondary]"
-              color="currentColor"
-            />
-            <SearchBox.Input
-              className="!outline-hidden focus-visible:outline-hidden grow bg-transparent outline-0 placeholder:text-[--text-tertiary] dark:placeholder:text-[--dark-text-tertiary]"
-              placeholder="Search"
-              type="text"
-              onFocus={() => {
-                if (search.query) setOpen(true);
-              }}
-            />
-          </label>
-        </Popover.Anchor>
-
-        <Popover.Portal>
-          <Popover.Content
-            align="end"
-            className="z-[999]"
-            sideOffset={8}
-            onOpenAutoFocus={(e) => {
-              e.preventDefault();
+      <div ref={containerRef} className="relative">
+        <label
+          className={clsx(
+            "focus-within:ring-2 ml-auto flex w-full cursor-text items-center gap-x-1 rounded-full border border-[--border] bg-[--surface-secondary] px-3.5 py-2.5 !ring-[--accent-500] dark:border-[--dark-border] dark:bg-[--dark-surface-secondary] md:max-w-[280px]",
+          )}
+        >
+          <Search className="size-5 shrink-0 text-[--text-secondary] dark:text-[--dark-text-secondary]" />
+          <SearchBox.Input
+            ref={searchInputRef}
+            className="!outline-none focus-visible:outline-none grow bg-transparent outline-0 placeholder:text-[--text-tertiary] dark:placeholder:text-[--dark-text-tertiary]"
+            placeholder="Search"
+            type="text"
+            onFocus={() => {
+              if (search.query) setOpen(true);
             }}
-          >
+          />
+        </label>
+
+        {open && (
+          <div className="absolute right-0 top-full z-[999] mt-2">
             <div className="relative mx-5 min-h-20 w-[calc(100vw_-_2.5rem)] scroll-py-2 overflow-y-auto overscroll-y-contain rounded-xl border border-[--surface-tertiary] bg-[--surface-primary] p-2 shadow-md dark:border-[--dark-surface-tertiary] dark:bg-[--dark-surface-primary] md:mx-0 md:max-h-[320px] md:w-[550px]">
               <SearchBox.Empty className="absolute left-1/2 top-1/2 w-fit max-w-full -translate-x-1/2 -translate-y-1/2 items-center overflow-hidden text-ellipsis whitespace-nowrap px-2 py-1 text-[--dark-text-tertiary]">
                 No results for <span className="font-medium">&ldquo;{search.query}&rdquo;</span>
@@ -91,9 +87,9 @@ export function SearchContent({ _searchKey }: { _searchKey: string }) {
 
               <HitList hits={search.result?.hits ?? []} />
             </div>
-          </Popover.Content>
-        </Popover.Portal>
-      </Popover.Root>
+          </div>
+        )}
+      </div>
     </SearchBox.Root>
   );
 }
@@ -148,7 +144,7 @@ function HitList({ hits }: { hits: Hit[] }) {
                 />
                 <div className="mt-3 flex justify-between gap-x-1">
                   <CustomAvatarHit
-                    authors={field as AuthorFragment[]}
+                    authors={(field as AuthorFragment[]) ?? []}
                     match={firstHighlightedAuthorId}
                   />
                   <SearchBox.HitSnippet

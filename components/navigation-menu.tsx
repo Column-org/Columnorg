@@ -2,16 +2,7 @@
 import * as React from "react";
 import clsx from "clsx";
 import Link from "next/link";
-import { ChevronDownIcon, HamburgerMenuIcon } from "@radix-ui/react-icons";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink as NavigationMenuLinkPrimitive,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  type NavigationMenuLinkProps,
-} from "@radix-ui/react-navigation-menu";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { $button, ButtonLink } from "../common/button";
 import { useToggleState } from "../hooks/use-toggle-state";
 import { useHasRendered } from "../hooks/use-has-rendered";
@@ -36,7 +27,7 @@ export interface HeaderProps {
     items: NavItem[];
   };
   rightCtas: {
-      items: {
+    items: {
       _id: string;
       href: string;
       label: string;
@@ -59,123 +50,84 @@ export function NavigationMenuHeader({
   className?: string;
 }) {
   return (
-    <NavigationMenu
-      className={clsx("z-1 relative flex-col justify-center lg:flex", className)}
-      delayDuration={50}
-    >
-      <NavigationMenuList className="flex flex-1 gap-0.5 px-4">
-        {links.map((link) =>
-          link.sublinks.items.length > 0 ? (
-            <NavigationMenuLinkWithMenu key={link._id} {...link} />
-          ) : (
-            <li key={link._id}>
-              <NavigationMenuLink href={link.href ?? "#"}>{link._title}</NavigationMenuLink>
-            </li>
-          ),
-        )}
-      </NavigationMenuList>
-    </NavigationMenu>
+    <nav className={clsx("z-1 relative flex-col justify-center lg:flex", className)}>
+      <ul className="flex flex-1 items-center gap-0.5 px-4">
+        {links.map((link) => (
+          <li key={link._id} className="group relative">
+            {link.sublinks.items.length > 0 ? (
+              <div className="relative group">
+                <button
+                  className={$button({
+                    className:
+                      "inline-flex items-center gap-1 rounded-full pb-px pl-3 pr-2 tracking-tight hover:bg-[--surface-tertiary] dark:hover:bg-[--dark-surface-tertiary] lg:h-7",
+                  })}
+                >
+                  {link.href ? (
+                    <Link href={link.href}>{link._title}</Link>
+                  ) : (
+                    <span className="cursor-default">{link._title}</span>
+                  )}
+                  <ChevronDown className="size-4 text-[--text-tertiary] transition-transform duration-200 group-hover:rotate-180 dark:text-[--dark-text-tertiary]" />
+                </button>
+                <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
+                  <ul className="w-[clamp(180px,30vw,300px)] rounded-md border border-[--border] bg-[--surface-primary] p-0.5 shadow-lg dark:border-[--dark-border] dark:bg-[--dark-surface-primary]">
+                    {link.sublinks.items.map((sublink) => (
+                      <li key={sublink._id}>
+                        <Link
+                          className={$button({
+                            className:
+                              "flex w-full items-center gap-2 rounded-md px-3 py-1.5 hover:bg-[--surface-tertiary] dark:hover:bg-[--dark-surface-tertiary]",
+                          })}
+                          href={sublink.href}
+                        >
+                          {sublink._title}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <Link
+                className={$button({
+                  className:
+                    "inline-flex h-6 shrink-0 items-center justify-center gap-1 rounded-full px-3 pb-px tracking-tight hover:bg-[--surface-tertiary] dark:hover:bg-[--dark-surface-tertiary] lg:h-7",
+                })}
+                href={link.href ?? "#"}
+              >
+                {link._title}
+              </Link>
+            )}
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }
 
-function NavigationMenuLink({
-  className,
-  children,
-  href,
-  ...props
-}: { children: React.ReactNode; href: string } & NavigationMenuLinkProps) {
-  return (
-    <NavigationMenuLinkPrimitive
-      className={$button({
-        className:
-          "inline-flex h-6 shrink-0 items-center justify-center gap-1 rounded-full px-3 pb-px tracking-tight hover:bg-[--surface-tertiary] dark:hover:bg-[--dark-surface-tertiary] lg:h-7",
-      })}
-      href={href}
-      {...props}
-    >
-      {children}
-    </NavigationMenuLinkPrimitive>
-  );
-}
-
-function NavigationMenuLinkWithMenu({ _title, href, sublinks }: NavItem) {
-  const [closeOnClick, setCloseOnClick] = React.useState(false);
-  const timeoutRef = React.useRef<number | null>(null);
-
-  const handleMouseEnter = () => {
-    timeoutRef.current = window.setTimeout(() => {
-      setCloseOnClick(true);
-    }, 500);
-  };
-
-  const handleMouseLeave = () => {
-    clearTimeout(timeoutRef.current!);
-    setCloseOnClick(false);
-  };
-
-  return (
-    <NavigationMenuItem key={`${href ?? ""}${_title}`} className="relative items-center gap-0.5">
-      <NavigationMenuTrigger
-        onClick={(e) => {
-          if (!closeOnClick) {
-            e.preventDefault();
-          }
-        }}
-        onPointerEnter={handleMouseEnter}
-        onPointerLeave={handleMouseLeave}
-        className={$button({
-          className:
-            "inline-flex items-center gap-1 rounded-full pb-px pl-3 pr-2 tracking-tight hover:bg-[--surface-tertiary] dark:hover:bg-[--dark-surface-tertiary] lg:h-7",
-        })}
-      >
-        {href ? (
-          <Link href={href}>{_title}</Link>
-        ) : (
-          <span className="cursor-default">{_title}</span>
-        )}
-        <ChevronDownIcon className="text-[--text-tertiary] dark:text-[--dark-text-tertiary]" />
-      </NavigationMenuTrigger>
-      <NavigationMenuContent className="absolute top-[calc(100%+4px)] w-[clamp(180px,30vw,300px)] rounded-md border border-[--border] bg-[--surface-primary] p-0.5 dark:border-[--dark-border] dark:bg-[--dark-surface-primary]">
-        <div className="flex flex-col gap-1">
-          <ul className="flex flex-col">
-            {sublinks.items.map((sublink) => {
-              const { href, _title } = sublink;
-
-              return (
-                <li key={sublink._id}>
-                  <NavigationMenuLinkPrimitive
-                    href={href}
-                    className={$button({
-                      className:
-                        "flex w-full items-center gap-2 rounded-md px-3 py-1.5 hover:bg-[--surface-tertiary] dark:hover:bg-[--dark-surface-tertiary]",
-                    })}
-                  >
-                    {_title}
-                  </NavigationMenuLinkPrimitive>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </NavigationMenuContent>
-    </NavigationMenuItem>
-  );
-}
-
-export function DesktopMenu({ navbar, rightCtas }: HeaderProps) {
+export function DesktopMenu({ 
+  navbar, 
+  rightCtas,
+  showLinksOnly,
+  showCtasOnly
+}: HeaderProps & { showLinksOnly?: boolean; showCtasOnly?: boolean }) {
   return (
     <>
-      <NavigationMenuHeader className="hidden lg:flex" links={navbar.items} />
-      <div className="hidden items-center gap-2 !justify-self-end lg:flex">
-        {rightCtas.items.map((cta) => {
-          return (
-            <ButtonLink key={cta._id} className="!px-3.5" href={cta.href} intent={cta.type}>
-              {cta.icon}
-              {cta.label}
-            </ButtonLink>
-          );
-        })}
-      </div>
+      {(!showCtasOnly) && (
+        <NavigationMenuHeader className="hidden lg:flex" links={navbar.items} />
+      )}
+      {(!showLinksOnly) && (
+        <div className="hidden items-center justify-self-end gap-2 lg:flex">
+          {rightCtas.items.map((cta) => {
+            return (
+              <ButtonLink key={cta._id} className="!px-3.5" href={cta.href} intent={cta.type}>
+                {cta.icon}
+                {cta.label}
+              </ButtonLink>
+            );
+          })}
+        </div>
+      )}
     </>
   );
 }
@@ -192,10 +144,10 @@ export function MobileMenu({ navbar, rightCtas }: HeaderProps) {
     <>
       <button
         aria-label="Toggle Menu"
-        className="col-start-3 flex items-center justify-center gap-2 !justify-self-end rounded-sm border border-[--border] bg-[--surface-secondary] p-2 dark:border-[--dark-border] dark:bg-[--dark-surface-secondary] lg:hidden lg:h-7"
+        className="col-start-3 flex items-center justify-center justify-self-end rounded-sm border border-[--border] bg-[--surface-secondary] p-2 dark:border-[--dark-border] dark:bg-[--dark-surface-secondary] lg:hidden lg:h-7"
         onPointerDown={handleToggle}
       >
-        <HamburgerMenuIcon className="size-4" />
+        {isOn ? <X className="size-4" /> : <Menu className="size-4" />}
       </button>
       <div className="block lg:hidden">
         {isOn ? (
@@ -208,8 +160,8 @@ export function MobileMenu({ navbar, rightCtas }: HeaderProps) {
                       key={link._id}
                       _id={link._id}
                       _title={link._title}
-                      sublinks={link.sublinks.items}
                       onClick={handleOff}
+                      sublinks={link.sublinks.items}
                     />
                   ) : (
                     <Link
@@ -227,7 +179,7 @@ export function MobileMenu({ navbar, rightCtas }: HeaderProps) {
                 {rightCtas.items.map((cta) => {
                   return (
                     <ButtonLink key={cta._id} href={cta.href} intent={cta.type} size="lg">
-                     {cta.icon}
+                      {cta.icon}
                       {cta.label}
                     </ButtonLink>
                   );
@@ -286,7 +238,7 @@ function ItemWithSublinks({
     <div key={_id}>
       <button className="flex items-center gap-2 px-3 py-1.5" onClick={handleToggle}>
         {_title}
-        <ChevronDownIcon
+        <ChevronDown
           className={clsx(
             "h-min transform text-[--text-tertiary] transition-transform dark:text-[--dark-text-tertiary]",
             isOn ? "rotate-180" : "rotate-0",

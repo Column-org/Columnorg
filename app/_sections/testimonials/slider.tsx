@@ -3,7 +3,7 @@ import { type EmblaCarouselType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import * as React from "react";
 import { BaseHubImage } from "basehub/next-image";
-import { ArrowLeftIcon, ArrowRightIcon } from "@radix-ui/react-icons";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { WheelGesturesPlugin } from "embla-carousel-wheel-gestures";
 import clsx from "clsx";
 
@@ -31,6 +31,8 @@ export function Slider({
 
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([]);
+  const [prevBtnDisabled, setPrevBtnDisabled] = React.useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = React.useState(true);
 
   const onDotButtonClick = React.useCallback(
     (index: number) => {
@@ -46,6 +48,8 @@ export function Slider({
 
   const onSelect = React.useCallback((emblaApi: EmblaCarouselType) => {
     setSelectedIndex(emblaApi.selectedScrollSnap());
+    setPrevBtnDisabled(!emblaApi.canScrollPrev());
+    setNextBtnDisabled(!emblaApi.canScrollNext());
   }, []);
 
   const onPrevButtonClick = React.useCallback(() => {
@@ -83,19 +87,22 @@ export function Slider({
         <div className="hidden gap-4 sm:flex">
           <Button
             aria-label="Previous testimonial"
-            className="!h-auto rounded-full px-4 py-2"
+            className="size-10 rounded-full md:size-12"
+            disabled={prevBtnDisabled}
             intent="secondary"
             onClick={onPrevButtonClick}
           >
-            <ArrowLeftIcon className="size-6" />
+            <span className="sr-only">Previous slide</span>
+            <ArrowLeft className="size-5" />
           </Button>
           <Button
-            aria-label="Next testimonial"
-            className="!h-auto rounded-full !px-4 !py-2"
+            className="size-10 rounded-full md:size-12"
+            disabled={nextBtnDisabled}
             intent="secondary"
             onClick={onNextButtonClick}
           >
-            <ArrowRightIcon className="size-6" />
+            <span className="sr-only">Next slide</span>
+            <ArrowRight className="size-5" />
           </Button>
         </div>
       </div>

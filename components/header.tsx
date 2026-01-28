@@ -1,8 +1,10 @@
+"use client";
+
 import { ButtonLink } from "@/common/button";
 import Image from "next/image";
 import { DesktopMenu, MobileMenu, HeaderProps } from "./navigation-menu";
-
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { Github } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const STATIC_HEADER_DATA: HeaderProps = {
   navbar: {
@@ -19,34 +21,55 @@ const STATIC_HEADER_DATA: HeaderProps = {
         href: "https://github.com/NileDex",
         label: "GitHub",
         type: "secondary",
-        icon: <GitHubLogoIcon className="size-4" />,
+        icon: <Github className="size-4" />,
       },
     ],
   },
 };
 
 export const Header = () => {
+  const { scrollYProgress } = useScroll();
+  
+  // Sync header background with page background transition
+  const headerBg = useTransform(
+    scrollYProgress,
+    [0.8, 0.95],
+    ["rgba(255, 255, 255, 0.95)", "rgba(255, 247, 234, 0.95)"]
+  );
+
   return (
-    <header className="sticky left-0 top-0 z-[110] flex w-full flex-col border-b border-[--border] bg-[--surface-primary] dark:border-[--dark-border] dark:bg-[--dark-surface-primary]">
-      <div className="flex min-h-[--header-height] bg-[--surface-primary] py-4 dark:bg-[--dark-surface-primary]">
-        <div className="container mx-auto grid w-full grid-cols-[auto_auto_1fr] items-center gap-8 px-6 lg:gap-12">
-          <ButtonLink unstyled className="flex items-center gap-3 ring-offset-2" href="/">
-            <Image
-              src="/Column.png"
-              alt="Column Logo"
-              width={150}
-              height={40}
-              className="h-10 w-auto object-contain"
-              priority
-            />
-            <span className="text-3xl font-bold text-[--text-primary] dark:text-[--dark-text-primary]">
-              Column
-            </span>
-          </ButtonLink>
-          <DesktopMenu {...STATIC_HEADER_DATA} />
-          <MobileMenu {...STATIC_HEADER_DATA} />
+    <motion.header 
+      style={{ backgroundColor: headerBg }}
+      className="sticky left-0 top-0 z-[110] flex w-full flex-col border-b border-[--border] backdrop-blur-sm"
+    >
+      <div className="flex min-h-[--header-height] py-4">
+        <div className="container mx-auto flex w-full items-center justify-between px-6">
+          <div className="flex items-center gap-8">
+            <ButtonLink unstyled className="flex items-center gap-3 ring-offset-2" href="/">
+              <Image
+                src="/Column.png"
+                alt="Column Logo"
+                width={150}
+                height={40}
+                className="h-10 w-auto object-contain"
+                priority
+              />
+              <span className="text-3xl font-bold text-[--text-primary]">
+                Column
+              </span>
+            </ButtonLink>
+            
+            {/* Navigation links close to the logo */}
+            <DesktopMenu {...STATIC_HEADER_DATA} showLinksOnly />
+          </div>
+          
+          <div className="flex items-center gap-8">
+            {/* CTA buttons on the right */}
+            <DesktopMenu {...STATIC_HEADER_DATA} showCtasOnly />
+            <MobileMenu {...STATIC_HEADER_DATA} />
+          </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };

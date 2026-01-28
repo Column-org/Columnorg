@@ -1,7 +1,21 @@
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { type VariantProps, cva } from "class-variance-authority";
 import clsx from "clsx";
+
+/**
+ * A simple Slot component that merges props onto its immediate child.
+ * Replaces @radix-ui/react-slot.
+ */
+const Slot = ({ children, ...props }: React.HTMLAttributes<HTMLElement> & { children?: React.ReactNode }) => {
+  if (React.isValidElement(children)) {
+    return React.cloneElement(children, {
+      ...props,
+      ...(children.props as any),
+      className: clsx(props.className, (children.props as any).className),
+    } as any);
+  }
+  return <>{children}</>;
+};
 
 const $headingContainer = cva("flex flex-col gap-3", {
   variants: {
@@ -24,11 +38,13 @@ type HeadingProps = {
   className?: string;
   title?: string;
   align?: string | null;
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  level?: number; // Added for compatibility with my ExpandingCards usage
 } & VariantProps<typeof $headingContainer>;
 
-export function Heading({ tag, subtitle, className, align = "center", ...props }: HeadingProps) {
+export function Heading({ tag, subtitle, className, align = "center", as, level, ...props }: HeadingProps) {
   align = align ?? "center";
-  const Comp = Slot;
+  const Comp = (as || (level ? `h${level}` : "h2")) as React.ElementType;
 
   if (align === "none") return null;
 
@@ -56,7 +72,7 @@ export function Heading({ tag, subtitle, className, align = "center", ...props }
       {subtitle ? (
         <p
           className={clsx(
-            "max-w-screen-md text-pretty text-lg font-light text-[--text-tertiary] dark:text-[--dark-text-tertiary] md:text-xl",
+            "max-w-screen-md text-pretty text-lg font-light text-[--text-tertiary] md:text-xl",
             {
               "text-center": align === "center",
               "text-left": align === "left",
@@ -82,7 +98,7 @@ export function Tag({
   return (
     <Comp
       className={clsx(
-        "flex min-h-7 items-center justify-center gap-2 rounded-full bg-[--surface-secondary] px-3.5 pb-px text-sm font-medium text-[--text-tertiary] dark:bg-[--dark-surface-secondary] dark:text-[--dark-text-tertiary] md:text-base",
+        "flex min-h-7 items-center justify-center gap-2 rounded-full bg-[--surface-secondary] px-3.5 pb-px text-sm font-medium text-[--text-tertiary] md:text-base",
         className,
       )}
       {...props}

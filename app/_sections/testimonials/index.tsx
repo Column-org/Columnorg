@@ -21,7 +21,7 @@ export function Testimonials({ heading, quotes }: TestimonialsSlider) {
             <div />
           ) : (
             <Heading className="self-stretch" {...heading}>
-              <h4>{heading.title}</h4>
+              {heading.title}
             </Heading>
           )}
         </Slider>

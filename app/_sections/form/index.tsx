@@ -8,7 +8,7 @@ import {
   SettingsLogoLiteFragment,
 } from "../../../components/form-components";
 import { Button } from "../../../common/button";
-import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { ArrowRight } from "lucide-react";
 import { LabeledInput, LabeledTextarea, LabeledWrapper } from "../../../components/labeled-input";
 import { sendEvent, parseFormData } from "basehub/events";
 import { Select } from "../../../components/select";
@@ -82,7 +82,7 @@ export function Form(props: Form & { settingsLogoLite: SettingsLogoLiteFragment 
           })}
           <div className="mt-3 flex items-center justify-between">
             <Button
-              icon={props.cta.icon ?? <ArrowRightIcon className="size-5" />}
+              icon={props.cta.icon ?? <ArrowRight className="size-4" />}
               iconSide="right"
               intent={props.cta.type}
               type="submit"

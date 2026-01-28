@@ -1,4 +1,4 @@
-import { CheckIcon } from "@radix-ui/react-icons";
+import { Check } from "lucide-react";
 import { type SVGProps } from "react";
 import clsx from "clsx";
 
@@ -39,7 +39,7 @@ export function Pricing(pricing: Pricing) {
   return (
     <Section className="xl:max-w-screen-xl" id="pricing">
       <Heading {...pricing.heading}>
-        <h4>{pricing.heading.title}</h4>
+        {pricing.heading.title}
       </Heading>
       <div className="flex flex-col gap-5 self-stretch lg:flex-row">
         {pricing.plans.items.map(({ plan }) => (
@@ -57,20 +57,20 @@ function PricingCard(item: PricingPlanItem["plan"]) {
     <article
       key={item._title}
       className={clsx(
-        "relative flex flex-1 flex-col overflow-hidden rounded-2xl border border-[--border] dark:border-[--dark-border]",
+        "relative flex flex-1 flex-col overflow-hidden rounded-2xl border border-[--border]",
         s.pricingCard,
       )}
     >
       <header className="flex flex-col gap-4 px-8 pb-0 pt-10">
         {item.isMostPopular ? (
-          <span className="absolute left-1/2 top-4 -translate-x-1/2 bg-[--surface-primary] text-center text-xs font-medium text-[--accent-500] dark:bg-[--dark-surface-primary] lg:text-sm">
+          <span className="absolute left-1/2 top-4 -translate-x-1/2 bg-[--surface-primary] text-center text-xs font-medium text-[--accent-500] lg:text-sm">
             Most popular
           </span>
         ) : null}
         <span className="text-center text-3xl font-medium lg:text-4xl">{item.price}</span>
         <div className="flex flex-col">
           <h5 className="text-center text-lg font-medium lg:text-xl">{item._title}</h5>
-          <p className="text-center text-sm text-[--text-tertiary] dark:text-[--dark-text-tertiary] lg:text-base">
+          <p className="text-center text-sm text-[--text-tertiary] lg:text-base">
             {item.billed}
           </p>
         </div>
@@ -80,9 +80,9 @@ function PricingCard(item: PricingPlanItem["plan"]) {
           {item.list.items.map((feature) => (
             <li
               key={feature._title}
-              className="flex items-start gap-3 text-sm text-[--text-secondary] dark:text-[--dark-text-secondary] lg:text-base"
+              className="flex items-start gap-3 text-sm text-[--text-secondary] lg:text-base"
             >
-              <CheckIcon className="mt-0.5 size-4 shrink-0 lg:size-5" />
+              <Check className="mt-0.5 size-4 shrink-0 lg:size-5" />
               <span>{feature._title}</span>
             </li>
           ))}

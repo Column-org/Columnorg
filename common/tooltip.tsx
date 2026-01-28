@@ -1,78 +1,77 @@
 "use client";
 import clsx from "clsx";
-import * as Tooltip from "@radix-ui/react-tooltip";
+import * as React from "react";
 
 export type SimpleTooltipProps = {
   content: React.ReactNode;
-  delayDuration?: Tooltip.TooltipProps["delayDuration"];
+  delayDuration?: number;
   disabled?: boolean;
   className?: string;
-  side?: Tooltip.TooltipContentProps["side"];
-  sideOffset?: Tooltip.TooltipContentProps["sideOffset"];
-} & Omit<Tooltip.TooltipProps, "className">;
+  side?: "top" | "right" | "bottom" | "left";
+  sideOffset?: number;
+  children: React.ReactNode;
+};
 
-export function SimpleTooltip({ delayDuration = 200, ...props }: SimpleTooltipProps) {
-  return (
-    <TooltipProvider delayDuration={delayDuration}>
-      <CustomTooltip {...props} />
-    </TooltipProvider>
-  );
-}
+export function SimpleTooltip({
+  children,
+  content,
+  side = "top",
+  sideOffset = 5,
+  className,
+  disabled,
+}: SimpleTooltipProps) {
+  const [isVisible, setIsVisible] = React.useState(false);
 
-export function CustomTooltip({ children, content, className, ...props }: SimpleTooltipProps) {
+  if (disabled) return <>{children}</>;
+
   return (
-    <Tooltip.Root>
-      <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
-      <Tooltip.Portal>
-        <Tooltip.Content
+    <div
+      className="relative flex items-center"
+      onMouseEnter={() => setIsVisible(true)}
+      onMouseLeave={() => setIsVisible(false)}
+    >
+      {children}
+      {isVisible && (
+        <div
           className={clsx(
-            "z-999 max-w-[160px] rounded-md border border-[--border] bg-[--surface-secondary] px-2 py-1 text-sm text-[--text-secondary] dark:border-[--dark-border] dark:bg-[--dark-surface-secondary] dark:text-[--dark-text-secondary]",
+            "absolute z-[999] rounded-md border border-[--border] bg-[--surface-secondary] px-2 py-1 text-sm text-[--text-secondary] shadow-md dark:border-[--dark-border] dark:bg-[--dark-surface-secondary] dark:text-[--dark-text-secondary]",
+            "whitespace-nowrap transition-all duration-200",
+            {
+              "bottom-full left-1/2 mb-2 -translate-x-1/2": side === "top",
+              "top-full left-1/2 mt-2 -translate-x-1/2": side === "bottom",
+              "left-full top-1/2 ml-2 -translate-y-1/2": side === "right",
+              "right-full top-1/2 mr-2 -translate-y-1/2": side === "left",
+            },
             className,
           )}
-          {...props}
         >
           {content}
-          <Tooltip.Arrow asChild>
-            <Arrow />
-          </Tooltip.Arrow>
-        </Tooltip.Content>
-      </Tooltip.Portal>
-    </Tooltip.Root>
+          <div
+            className={clsx(
+              "absolute size-2 rotate-45 border border-[--border] bg-[--surface-secondary] dark:border-[--dark-border] dark:bg-[--dark-surface-secondary]",
+              {
+                "bottom-[-5px] left-1/2 -translate-x-1/2 border-l-0 border-t-0": side === "top",
+                "top-[-5px] left-1/2 -translate-x-1/2 border-b-0 border-r-0": side === "bottom",
+                "left-[-5px] top-1/2 -translate-y-1/2 border-r-0 border-t-0": side === "right",
+                "right-[-5px] top-1/2 -translate-y-1/2 border-b-0 border-l-0": side === "left",
+              },
+            )}
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
-function Arrow() {
-  return (
-    <svg
-      className="-mt-px"
-      fill="none"
-      height="10"
-      viewBox="0 0 12 10"
-      width="12"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        className="fill-surface-secondary dark:fill-dark-surface-secondary dark:stroke-dark-border stroke-border"
-        d="M6.76649 7.55043C6.41506 8.12151 5.58494 8.12151 5.23351 7.55043L0.894781 0.500001L11.1052 0.5L6.76649 7.55043Z"
-      />
-      <path
-        className="fill-surface-secondary dark:fill-dark-surface-secondary"
-        d="M1.3418 0H10.7666L10.1989 1H1.80013L1.3418 0Z"
-      />
-    </svg>
-  );
+export function CustomTooltip(props: SimpleTooltipProps) {
+  return <SimpleTooltip {...props} />;
 }
 
 export function TooltipProvider({
   children,
-  delayDuration = 200,
 }: {
   children?: React.ReactNode;
   delayDuration?: number;
 }) {
-  return (
-    <Tooltip.Provider delayDuration={delayDuration} skipDelayDuration={500}>
-      {children}
-    </Tooltip.Provider>
-  );
+  return <>{children}</>;
 }

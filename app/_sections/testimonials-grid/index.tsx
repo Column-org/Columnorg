@@ -16,7 +16,7 @@ export function TestimonialsGrid({ heading, quotes }: TestimonialsGrid) {
   return (
     <Section>
       <Heading {...heading}>
-        <h4>{heading.title}</h4>
+        {heading.title}
       </Heading>
       <TestimonialsGridClient quotes={quotes} />
     </Section>
