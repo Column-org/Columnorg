@@ -14,34 +14,36 @@ export const ExpandingCards = () => {
     offset: ["start start", "end start"],
   });
 
-  // Hero phase: 0% to 20% scroll - hero is alone
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-  const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-  const heroTranslateY = useTransform(scrollYProgress, [0, 0.2], [0, -50]);
+  // Hero phase: 0% to 15% scroll
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.12], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 0.12], [1, 0.95]);
+  const heroTranslateY = useTransform(scrollYProgress, [0, 0.12], [0, -50]);
 
-  // Intermediate heading appears as hero fades: 15% to 30%
-  const intermediateOpacity = useTransform(scrollYProgress, [0.15, 0.25, 0.35], [0, 1, 0]);
+  // Intermediate heading appears: 10% to 28%
+  const intermediateOpacity = useTransform(scrollYProgress, [0.1, 0.18, 0.28], [0, 1, 0]);
   
-  // Cards appear after hero and intermediate heading: 35% to 45%
-  const cardsOpacity = useTransform(scrollYProgress, [0.35, 0.45], [0, 1]);
-  const cardsY = useTransform(scrollYProgress, [0.35, 0.45], [50, 0]);
+  // Cards appearance: 25% to 35%
+  const cardsOpacity = useTransform(scrollYProgress, [0.25, 0.35], [0, 1]);
+  const cardsY = useTransform(scrollYProgress, [0.25, 0.35], [50, 0]);
   
-  // Expansion phase: 45% to 65% scroll
-  const expansionProgress = useTransform(scrollYProgress, [0.45, 0.65], [0, 1]);
+  // Expansion phase: 32% to 45%
+  const expansionProgress = useTransform(scrollYProgress, [0.32, 0.45], [0, 1]);
   
-  // Horizontal scroll phase: 60% to 95% scroll
-  // We go slightly further (-110%) to ensure we see the last card clearly
-  const xTranslate = useTransform(scrollYProgress, [0.65, 0.95], ["0%", "-110%"]);
+  // Horizontal scroll phase: 40% to 95%
+  // We use steps (0 to 4) for smoother mathematical interpolation
+  const horizontalStep = useTransform(scrollYProgress, [0.4, 0.95], [0, 4]);
+  const xTranslate = useTransform(horizontalStep, (step) => `calc(-${step} * (var(--card-width) + var(--card-gap)))`);
 
   const handleManualScroll = (direction: 'left' | 'right') => {
     if (!containerRef.current) return;
     
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const viewportHeight = window.innerHeight;
-    const totalHeight = 500 * viewportHeight / 100; // 500vh
+    const scrollSectionHeight = 350 * viewportHeight / 100;
     
-    // Step size is 15% of the total scrollable height for a meaningful jump
-    const step = totalHeight * 0.15;
+    // One card step in scroll progress: (0.95 - 0.40) / 4 = 0.55 / 4 = 0.1375
+    const step = scrollSectionHeight * 0.1375;
+    
     const targetScroll = direction === 'right' 
       ? scrollTop + step 
       : scrollTop - step;
@@ -53,25 +55,21 @@ export const ExpandingCards = () => {
   };
 
   return (
-    <section ref={containerRef} className="relative h-[500vh] @container p-0! overflow-x-clip m-0!">
+    <section 
+      ref={containerRef} 
+      className="relative h-[350vh] @container p-0! overflow-x-clip m-0! [--card-width:calc(100vw-5rem)] [--card-gap:0.75rem] sm:[--card-width:300px] sm:[--card-gap:1.5rem] md:[--card-width:380px] md:[--card-gap:2.5rem]"
+    >
       <div className="sticky top-[--header-height] h-[calc(100svh-var(--header-height))] flex flex-col items-center justify-center overflow-hidden">
-        {/* Original Hero Decorations */}
-        <motion.div 
-          style={{ opacity: heroOpacity }}
-          className="absolute inset-0 z-0 pointer-events-none"
-        >
+        {/* Decorations */}
+        <motion.div style={{ opacity: heroOpacity }} className="absolute inset-0 z-0 pointer-events-none">
           <div className="absolute left-0 top-0 grid h-full w-full grid-cols-[clamp(28px,10vw,120px)_auto_clamp(28px,10vw,120px)]">
             <div className="col-span-1 border-r border-[--border]" />
             <div className="col-span-1 border-r border-[--border]" />
-            <div className="col-span-1" />
           </div>
-          {/* Enhanced Glow */}
           <figure className="absolute -bottom-[20%] left-1/2 aspect-square w-[600px] -translate-x-1/2 rounded-full bg-[--accent-500]/30 blur-[120px]" />
-          <figure className="absolute left-[4vw] top-[64px] hidden aspect-square w-[32vw] rounded-full bg-[--surface-primary] opacity-50 blur-[100px] md:block" />
-          <figure className="absolute bottom-[-50px] right-[7vw] hidden aspect-square w-[30vw] rounded-full bg-[--surface-primary] opacity-50 blur-[100px] md:block" />
         </motion.div>
 
-        {/* Unified Hero Container */}
+        {/* Hero */}
         <motion.div 
           className="absolute inset-0 flex flex-col items-center justify-center z-10"
           style={{
@@ -83,38 +81,72 @@ export const ExpandingCards = () => {
         >
           <div className="flex flex-col items-center gap-8 w-full max-w-4xl px-6">
             <div className="flex flex-col items-center gap-4">
-              <h1 className="text-pretty text-center text-[clamp(48px,9vw,88px)] font-semibold leading-[1.05] tracking-[-0.045em] text-[--text-primary]">
+              <h1 className="text-pretty text-center text-[clamp(44px,8vw,80px)] font-semibold leading-[1.1] tracking-[-0.04em] text-[--text-primary]">
                 Redefining wallets<br />on Movement
               </h1>
               <p className="text-base max-w-xl text-pretty text-center text-[--text-tertiary] md:text-lg">
                 Making Onboarding consumer first on Movementlabs
               </p>
             </div>
-            
-            <div className="relative flex w-full flex-col items-center justify-center max-w-md">
-              <Button className="!h-14 w-full rounded-xl !text-base font-semibold shadow-[0_20px_50px_rgba(251,191,36,0.2)] md:!text-lg" intent="primary">
-                Get Started for Free
-              </Button>
-            </div>
+            <Button className="!h-14 w-full sm:w-auto px-12" intent="primary">
+              Get Started for Free
+            </Button>
           </div>
         </motion.div>
 
-        {/* Intermediate heading disappears - Frame 2 */}
+        {/* Intermediate */}
         <motion.div
           style={{ 
             opacity: intermediateOpacity,
             visibility: useTransform(intermediateOpacity, (v) => v <= 0 ? "hidden" : "visible") as any,
           }}
-          className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none"
+          className="absolute inset-0 flex flex-col items-center justify-start pt-[12vh] z-50 pointer-events-auto md:pt-[15vh]"
         >
-          <Heading level={2} className="text-4xl font-bold tracking-tighter sm:text-6xl md:text-8xl mb-6">
-            Everything you need <br /> in one place.
-          </Heading>
+          <div className="relative">
+            {/* Pulsing Sparkles around Heading */}
+            <motion.div
+              animate={{
+                opacity: [0.4, 1, 0.4],
+                scale: [0.8, 1.2, 0.8],
+                rotate: [0, 15, -15, 0],
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -left-12 -top-12 md:-left-20 md:-top-20 pointer-events-none"
+            >
+              <img src="/sparkles.svg" alt="" className="w-8 h-8 md:w-12 md:h-12 opacity-80" />
+            </motion.div>
+
+            <motion.div
+              animate={{
+                opacity: [0.3, 0.9, 0.3],
+                scale: [0.7, 1.1, 0.7],
+                rotate: [0, -10, 10, 0],
+              }}
+              transition={{ duration: 5, repeat: Infinity, delay: 1, ease: "easeInOut" }}
+              className="absolute -right-8 -bottom-8 md:-right-16 md:-bottom-16 pointer-events-none"
+            >
+              <img src="/sparkles.svg" alt="" className="w-6 h-6 md:w-10 md:h-10 opacity-60" />
+            </motion.div>
+
+            <motion.div
+              animate={{
+                opacity: [0.2, 0.7, 0.2],
+                scale: [0.6, 1.3, 0.6],
+              }}
+              transition={{ duration: 6, repeat: Infinity, delay: 2, ease: "easeInOut" }}
+              className="absolute left-1/2 -top-16 -translate-x-1/2 md:-top-24 pointer-events-none"
+            >
+              <img src="/sparkles.svg" alt="" className="w-4 h-4 md:w-8 md:h-8 opacity-40 blur-[0.5px]" />
+            </motion.div>
+
+            <Heading level={2} className="text-pretty text-center text-4xl font-bold tracking-tighter sm:text-6xl md:text-8xl">
+              Everything you need <br /> in one place.
+            </Heading>
+          </div>
         </motion.div>
 
-        {/* Cards and Navigation container - Frame 3 */}
-        <div className="absolute inset-x-0 bottom-0 top-0 flex flex-col items-center justify-center z-30 pointer-events-none">
-          {/* Cards slider */}
+        {/* Cards container - ALIGNED TO EDGE */}
+        <div className="absolute inset-0 flex items-center z-30 pointer-events-none">
           <motion.div 
             style={{ 
               x: xTranslate, 
@@ -122,7 +154,7 @@ export const ExpandingCards = () => {
               y: cardsY,
               visibility: useTransform(cardsOpacity, (v) => v <= 0 ? "hidden" : "visible") as any,
             }}
-            className="flex items-center justify-start gap-3 px-6 cursor-grab active:cursor-grabbing sm:gap-4 sm:px-[10vw] md:gap-5 md:px-[15vw] pointer-events-auto"
+            className="flex items-center justify-start gap-[--card-gap] px-10 sm:px-20 md:px-32 pointer-events-auto"
           >
             {CARDS.map((card, index) => (
               <Card 
@@ -134,26 +166,24 @@ export const ExpandingCards = () => {
             ))}
           </motion.div>
 
-          {/* Manual Navigation Pill */}
+          {/* Navigation */}
           <motion.div
             style={{ 
               opacity: cardsOpacity,
               visibility: useTransform(cardsOpacity, (v) => v <= 0 ? "hidden" : "visible") as any,
             }}
-            className="absolute right-6 top-1/2 -translate-y-1/2 z-40 pointer-events-auto md:right-12"
+            className="absolute right-6 top-1/2 -translate-y-1/2 z-40 pointer-events-auto"
           >
-            <div className="flex flex-col items-center gap-2 rounded-full border border-[--border] bg-white/80 backdrop-blur-md p-1.5 shadow-xl">
+            <div className="flex flex-col items-center gap-3 rounded-full border border-[--border] bg-white/80 backdrop-blur-md p-2 shadow-xl">
               <button 
-                aria-label="Next card"
                 onClick={() => handleManualScroll('right')}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff7ea] text-[#4F3F85] hover:bg-[#fff2d1] transition-all active:scale-95 shadow-sm border border-[--border]/30"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff7ea] text-[#4F3F85] hover:bg-[#fff2d1] transition-all active:scale-95 shadow-sm border border-[#4F3F85]/10"
               >
                 <ChevronRight className="size-8" />
               </button>
               <button 
-                aria-label="Previous card"
                 onClick={() => handleManualScroll('left')}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff7ea] text-[#4F3F85] hover:bg-[#fff2d1] transition-all active:scale-95 shadow-sm border border-[--border]/30"
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-[#fff7ea] text-[#4F3F85] hover:bg-[#fff2d1] transition-all active:scale-95 shadow-sm border border-[#4F3F85]/10"
               >
                 <ChevronLeft className="size-8" />
               </button>
@@ -194,15 +224,5 @@ const CARDS = [
     title: "Institutional grade security for everyone.",
     color: "bg-[#D1F2EB]",
     description: "MPC & Social Recovery",
-  },
-  {
-    title: "The fastest way to swap tokens.",
-    color: "bg-[#FEF9E7]",
-    description: "Best rates, zero fees",
-  },
-  {
-    title: "Your keys, your crypto. Always.",
-    color: "bg-[#EBF5FB]",
-    description: "Self-custody made easy",
   },
 ];

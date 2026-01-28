@@ -2,6 +2,7 @@
 import * as React from "react";
 import { motion, useTransform, MotionValue } from "framer-motion";
 import clsx from "clsx";
+import { useRef } from "react";
 import Image from "next/image";
 
 interface CardProps {
@@ -38,7 +39,7 @@ export const Card = ({ title, color, image, description, index, progress }: Card
         zIndex: 10 + index,
       }}
       className={clsx(
-        "relative shrink-0 w-[280px] h-[400px] rounded-[24px] p-6 flex flex-col gap-4 shadow-2xl overflow-hidden sm:w-[320px] sm:h-[480px] md:w-[420px] md:h-[580px] md:rounded-[40px] md:p-10 md:gap-6",
+        "relative shrink-0 w-[calc(100vw-5rem)] h-[460px] rounded-[24px] p-6 flex flex-col gap-4 shadow-2xl overflow-hidden sm:w-[300px] sm:h-[440px] md:w-[380px] md:h-[520px] md:rounded-[40px] md:p-8 md:gap-5",
         color
       )}
     >
