@@ -1,0 +1,34 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Providers } from './components/providers'
+import { Header } from './components/header'
+import { Footer } from './components/footer'
+import { ScrollBackground } from './components/scroll-background'
+import { ErrorSuppressor } from './components/error-suppressor'
+import Home from './pages_home/page'
+import PrivacyPolicy from './pages_privacy/page'
+
+import './styles/globals.css'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <ErrorSuppressor />
+      <Providers>
+        {/* Header */}
+        <Header />
+        <ScrollBackground>
+          <main className="min-h-[calc(100vh-var(--header-height))]">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+            </Routes>
+          </main>
+          {/* Footer */}
+          <Footer />
+        </ScrollBackground>
+      </Providers>
+    </BrowserRouter>
+  </React.StrictMode>,
+)

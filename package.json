@@ -2,10 +2,9 @@
   "name": "basehub-marketing-website-template",
   "version": "0.1.0",
   "scripts": {
-    "build": "next build",
-    "dev": "next dev --turbopack",
-    "lint": "next lint",
-    "start": "next start"
+    "build": "tsc -b && vite build",
+    "dev": "vite",
+    "preview": "vite preview"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -19,13 +18,13 @@
     "hast-util-to-jsx-runtime": "^2.3.0",
     "input-otp": "latest",
     "lucide-react": "^0.454.0",
-    "next": "15.2.6",
     "next-themes": "latest",
     "react": "^19",
     "react-day-picker": "latest",
     "react-dom": "^19",
     "react-hook-form": "latest",
     "react-resizable-panels": "latest",
+    "react-router-dom": "^7.13.0",
     "recharts": "latest",
     "sonner": "latest",
     "tailwind-merge": "^2.5.5",
@@ -36,15 +35,16 @@
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.13",
     "@types/culori": "^4.0.0",
-    "@types/node": "^22",
+    "@types/node": "^22.19.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^5.1.4",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.8",
     "postcss": "^8.5",
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.11",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vite": "^7.3.1"
   }
 }
