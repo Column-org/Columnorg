@@ -177,8 +177,19 @@ export const Header = () => {
           >
             <div className="flex flex-col px-6 py-8">
               <nav className="flex flex-col gap-6 text-2xl font-medium text-[--text-primary]">
-                <Link to="/#features" onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
-                <Link to="/#learn" onClick={() => setIsMobileMenuOpen(false)}>Learn</Link>
+                <div className="flex flex-col gap-2">
+                  <Link to="/#features" onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
+                  <div className="flex flex-col gap-2 pl-4">
+                    <Link to="/#start-here" onClick={() => setIsMobileMenuOpen(false)} className="text-base text-[--text-secondary]">Start here.</Link>
+                    <Link to="/cpanel" onClick={() => setIsMobileMenuOpen(false)} className="text-base text-[--text-secondary]">Column C-Panel</Link>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Link to="/#learn" onClick={() => setIsMobileMenuOpen(false)}>Learn</Link>
+                  <div className="flex flex-col gap-2 pl-4">
+                    <a href="#" onClick={() => setIsMobileMenuOpen(false)} className="text-base text-[--text-secondary]">M1 Docs</a>
+                  </div>
+                </div>
                 <Link to="/#developers" onClick={() => setIsMobileMenuOpen(false)}>Developers</Link>
                 <Link to="/#support" onClick={() => setIsMobileMenuOpen(false)}>Support</Link>
                 
