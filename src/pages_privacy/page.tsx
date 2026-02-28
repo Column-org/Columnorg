@@ -6,11 +6,11 @@ const POLICY_SECTIONS = [
     icon: <Shield className="size-6 text-[--text-primary]" />,
     content: (
       <>
-        <p className="mb-4 text-[--muted-foreground]">
+        <p className="mb-4 text-[--text-secondary]">
           Welcome to Column ("we," "our," or "us"). We respect your privacy and are committed to protecting it. 
           As a non-custodial wallet provider, our architecture is fundamentally built around user privacy and data minimization.
         </p>
-        <p className="text-[--muted-foreground]">
+        <p className="text-[--text-secondary]">
           This Privacy Policy explains our practices regarding the collection, use, and disclosure of information when you use our wallet software and services.
         </p>
       </>
@@ -21,10 +21,10 @@ const POLICY_SECTIONS = [
     icon: <Key className="size-6 text-[--text-primary]" />,
     content: (
       <>
-        <p className="mb-4 text-[--muted-foreground]">
+        <p className="mb-4 text-[--text-secondary]">
           Column is a <strong>non-custodial cryptocurrency wallet</strong>. This means you are in full control of your digital assets at all times.
         </p>
-        <ul className="list-inside list-disc space-y-2 text-[--muted-foreground] marker:text-[--text-primary]">
+        <ul className="list-inside list-disc space-y-2 text-[--text-secondary] marker:text-[--text-primary]">
           <li>We <strong>do not</strong> have access to your private keys.</li>
           <li>We <strong>do not</strong> have access to your secret recovery phrase (seed phrase).</li>
           <li>We <strong>cannot</strong> recover your funds or keys if you lose them.</li>
@@ -38,7 +38,7 @@ const POLICY_SECTIONS = [
     icon: <EyeOff className="size-6 text-[--text-primary]" />,
     content: (
       <>
-        <p className="mb-4 text-[--muted-foreground]">
+        <p className="mb-4 text-[--text-secondary]">
           To maximize your privacy, we strictly limit the data our software records. We never collect or transmit:
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -62,10 +62,10 @@ const POLICY_SECTIONS = [
     icon: <Database className="size-6 text-[--text-primary]" />,
     content: (
       <>
-        <p className="mb-4 text-[--muted-foreground]">
+        <p className="mb-4 text-[--text-secondary]">
           Due to the inherent nature of specific software operations, we or our third-party infrastructure providers might temporarily process:
         </p>
-        <ul className="list-inside list-disc space-y-2 text-[--muted-foreground]">
+        <ul className="list-inside list-disc space-y-2 text-[--text-secondary]">
           <li>
             <strong className="text-[--text-primary]">Public Wallet Addresses:</strong> To fetch balances and facilitate transactions via public blockchain nodes.
           </li>
@@ -84,12 +84,12 @@ const POLICY_SECTIONS = [
     icon: <Lock className="size-6 text-[--text-primary]" />,
     content: (
       <>
-        <p className="mb-4 text-[--muted-foreground]">
+        <p className="mb-4 text-[--text-secondary]">
           Please be aware that blockchain networks (like Ethereum, Bitcoin, Solana, Aptos, etc.) are public ledgers. 
           When you use Column to broadcast a transaction, the details of that transaction—including your public address, 
           the amount transferred, and the smart contracts interacted with—become permanently visible to the public.
         </p>
-        <p className="text-[--muted-foreground]">
+        <p className="text-[--text-secondary]">
           We have no control over public blockchain networks and cannot alter or delete data that is recorded on-chain.
         </p>
       </>
@@ -99,11 +99,11 @@ const POLICY_SECTIONS = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen pb-24 pt-16">
+    <div className="min-h-screen pb-24 pt-32 md:pt-40">
       <div className="container mx-auto px-6 md:max-w-4xl">
         {/* Header Section */}
         <div className="mb-16 flex flex-col items-center text-center">
-          <div className="mb-8 rounded-2xl bg-[rgba(255,255,255,0.05)] p-4 ring-1 ring-[--border] backdrop-blur-md">
+          <div className="mb-8 rounded-2xl bg-[--surface-secondary] p-4 ring-1 ring-[--border] backdrop-blur-md">
             <img
               src="/Column.png"
               alt="Column Logo"
@@ -115,7 +115,7 @@ export default function PrivacyPolicyPage() {
           <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-[--text-primary] sm:text-5xl lg:text-6xl">
             Privacy Policy
           </h1>
-          <p className="max-w-2xl text-lg text-[--muted-foreground] sm:text-xl">
+          <p className="max-w-2xl text-lg text-[--text-secondary] sm:text-xl">
             As a decentralized and non-custodial wallet, your privacy and security are our highest priority. 
             Here is everything you need to know about how we handle your data.
           </p>
@@ -129,10 +129,10 @@ export default function PrivacyPolicyPage() {
           {POLICY_SECTIONS.map((section, idx) => (
             <div 
               key={idx}
-              className="group relative overflow-hidden rounded-2xl border border-[--border] bg-[rgba(255,255,255,0.02)] p-6 transition-colors hover:bg-[rgba(255,255,255,0.04)] sm:p-8"
+              className="group relative overflow-hidden rounded-2xl border border-[--border] bg-[--surface-secondary] p-6 transition-colors hover:bg-[--surface-tertiary] sm:p-8"
             >
               <div className="mb-4 flex items-center gap-4">
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-[var(--border)] transition-transform group-hover:scale-110 group-hover:bg-[rgba(255,255,255,0.1)]">
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl border border-[--border] bg-[--surface-primary] transition-transform group-hover:scale-110 group-hover:bg-[--surface-tertiary]">
                   {section.icon}
                 </div>
                 <h2 className="text-2xl font-bold tracking-tight text-[--text-primary]">

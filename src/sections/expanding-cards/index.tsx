@@ -30,24 +30,21 @@ export const ExpandingCards = () => {
   // Expansion phase: 50% to 62%
   const expansionProgress = useTransform(scrollYProgress, [0.5, 0.62], [0, 1]);
   
-  // Horizontal scroll phase: 62% to 95%
-  // We use steps (0 to 4) for smoother mathematical interpolation
-  const horizontalStep = useTransform(scrollYProgress, [0.62, 0.95], [0, 4]);
+  // Horizontal scroll phase: 62% to 98%
+  const horizontalStep = useTransform(scrollYProgress, [0.62, 0.98], [0, 4]);
   const xTranslate = useTransform(horizontalStep, (step) => `calc(-${step} * (var(--card-width) + var(--card-gap)))`);
 
   const handleManualScroll = (direction: 'left' | 'right') => {
     if (!containerRef.current) return;
+    const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollSectionHeight = containerRef.current.offsetHeight;
     
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    const viewportHeight = window.innerHeight;
-    const scrollSectionHeight = 350 * viewportHeight / 100;
-    
-    // One card step in scroll progress: (0.95 - 0.62) / 4 = 0.33 / 4 = 0.0825
-    const step = scrollSectionHeight * 0.0825;
+    // One card step in scroll progress: (0.98 - 0.62) / 4 = 0.36 / 4 = 0.09
+    const step = scrollSectionHeight * 0.09;
     
     const targetScroll = direction === 'right' 
-      ? scrollTop + step 
-      : scrollTop - step;
+      ? currentScrollTop + step 
+      : currentScrollTop - step;
 
     window.scrollTo({
       top: targetScroll,
@@ -58,15 +55,12 @@ export const ExpandingCards = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative h-[350vh] @container !p-0 overflow-x-clip !m-0 [--card-width:calc(100vw-5rem)] [--card-gap:0.75rem] sm:[--card-width:300px] sm:[--card-gap:1.5rem] md:[--card-width:380px] md:[--card-gap:2.5rem]"
+      className="relative h-[550vh] md:h-[400vh] lg:h-[350vh] @container !p-0 overflow-x-clip !m-0 [--card-width:calc(100vw-5rem)] [--card-gap:0.75rem] sm:[--card-width:300px] sm:[--card-gap:1.5rem] md:[--card-width:380px] md:[--card-gap:2.5rem]"
     >
       <div className="sticky top-[var(--header-height)] h-[calc(100vh-var(--header-height))] flex flex-col items-center justify-center overflow-hidden">
         {/* Decorations */}
         <motion.div style={{ opacity: heroOpacity }} className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute left-0 top-0 grid h-full w-full grid-cols-[clamp(28px,10vw,120px)_auto_clamp(28px,10vw,120px)]">
-            <div className="col-span-1 border-r border-[--border]" />
-            <div className="col-span-1 border-r border-[--border]" />
-          </div>
+
           <figure className="absolute -bottom-[20%] left-1/2 aspect-square w-[600px] -translate-x-1/2 rounded-full bg-[--accent-500]/30 blur-[120px]" />
         </motion.div>
 
@@ -157,42 +151,6 @@ export const ExpandingCards = () => {
               </pre>
             </div>
 
-            {/* Pulsing Sparkles around Heading */}
-            <motion.div
-              animate={{
-                opacity: [0.4, 1, 0.4],
-                scale: [0.8, 1.2, 0.8],
-                rotate: [0, 15, -15, 0],
-              }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute -left-12 -top-12 md:-left-20 md:-top-20 pointer-events-none"
-            >
-              <img src="/sparkles.svg" alt="" className="w-8 h-8 md:w-12 md:h-12 opacity-80" />
-            </motion.div>
-
-            <motion.div
-              animate={{
-                opacity: [0.3, 0.9, 0.3],
-                scale: [0.7, 1.1, 0.7],
-                rotate: [0, -10, 10, 0],
-              }}
-              transition={{ duration: 5, repeat: Infinity, delay: 1, ease: "easeInOut" }}
-              className="absolute -right-8 -bottom-8 md:-right-16 md:-bottom-16 pointer-events-none"
-            >
-              <img src="/sparkles.svg" alt="" className="w-6 h-6 md:w-10 md:h-10 opacity-60" />
-            </motion.div>
-
-            <motion.div
-              animate={{
-                opacity: [0.2, 0.7, 0.2],
-                scale: [0.6, 1.3, 0.6],
-              }}
-              transition={{ duration: 6, repeat: Infinity, delay: 2, ease: "easeInOut" }}
-              className="absolute left-1/2 -top-16 -translate-x-1/2 md:-top-24 pointer-events-none"
-            >
-              <img src="/sparkles.svg" alt="" className="w-4 h-4 md:w-8 md:h-8 opacity-40 blur-[0.5px]" />
-            </motion.div>
-
             <Heading level={2} className="text-pretty text-center text-4xl font-bold tracking-tighter sm:text-6xl md:text-8xl">
               Everything you need <br /> in one place.
             </Heading>
@@ -262,7 +220,7 @@ export const ExpandingCards = () => {
 
 const CARDS = [
   {
-    title: "Multiple chains, one wallet. No more switching.",
+    title: "Buy and sell all types of crypto in an instant.",
     color: "bg-[#B0A2F2]",
     image: "/wallet_card_mockup_1769554119799.png",
     description: "Personalize your experience",
@@ -284,10 +242,5 @@ const CARDS = [
     color: "bg-[#FDF2B3]",
     image: "/notifications_card_mockup_1769554175202.png",
     description: "Real-time alerts",
-  },
-  {
-    title: "Institutional grade security for everyone.",
-    color: "bg-[#D1F2EB]",
-    description: "MPC & Social Recovery",
   },
 ];

@@ -11,8 +11,6 @@ export function Companies() {
         Partners
       </h2>
       <div className="no-scrollbar flex max-w-full justify-center overflow-auto">
-        <div className="bg-linear-to-r from-[--surface-primary] pointer-events-none absolute left-0 top-0 h-full w-[30vw] bg-transparent xl:hidden" />
-        <div className="bg-linear-to-l from-[--surface-primary] pointer-events-none absolute right-0 top-0 h-full w-[30vw] bg-transparent xl:hidden" />
         <div
           className={clsx("flex shrink-0 items-center gap-4 px-6 lg:gap-6 lg:px-12", s.scrollbar)}
         >

@@ -114,6 +114,19 @@ body {
 
 /* Theme-specific color overrides */
 :root {
+  color: var(--grayscale-950);
+  background-color: var(--grayscale-50);
+
+  ::selection {
+    background-color: var(--accent-200);
+  }
+
+  *:focus-visible {
+    outline-color: var(--accent-300);
+  }
+}
+
+.dark {
   color: var(--grayscale-50);
   background-color: var(--grayscale-950);
 
@@ -123,19 +136,6 @@ body {
 
   *:focus-visible {
     outline-color: var(--accent-400);
-  }
-}
-
-:root:not(html.dark) {
-  color: var(--grayscale-900);
-  background-color: var(--grayscale-50);
-
-  ::selection {
-    background-color: var(--accent-200);
-  }
-
-  *:focus-visible {
-    outline-color: var(--accent-300);
   }
 }
 

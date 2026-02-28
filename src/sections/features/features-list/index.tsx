@@ -7,56 +7,55 @@ import { Heading } from "@/common/heading";
 const FEATURE_LIST_DATA = {
   heading: {
     title: "Why Choose Column?",
-    subtitle: "Built for the future",
+    subtitle: "Your Keys, Your Crypto",
     tag: "Benefits",
   },
   items: [
     {
-      _title: "Uses Privy",
-      description: "Seamless authentication and wallet management powered by Privy.",
+      _title: "True Self-Custody",
+      description: "You have complete control over your assets. We never hold your private keys or your funds.",
       image: {
         url: "/protected.avif",
         width: 560,
         height: 374,
-        alt: "Uses Privy",
+        alt: "True Self-Custody",
       },
       characteristics: {
         items: [
-          { _title: "Sub-second finality" },
-          { _title: "High throughput" },
+          { _title: "No central point of failure" },
+          { _title: "100% user-controlled" },
         ],
       },
     },
-    // Add more items as needed
     {
-      _title: "Secure Asset Transfer",
-      description: "Experience the highest standard of security for all your asset transfers.",
+      _title: "Enhanced Privacy & Security",
+      description: "Interact with the blockchain securely and anonymously without forced KYC or invasive tracking.",
       image: {
         url: "/web3wallet.png",
         width: 560,
         height: 374,
-        alt: "Secure Asset Transfer",
+        alt: "Enhanced Privacy & Security",
       },
       characteristics: {
         items: [
-          { _title: "Multi-layer encryption" },
-          { _title: "Verified protocols" },
+          { _title: "Zero personal data collection" },
+          { _title: "Open-source architecture" },
         ],
       },
     },
     {
-      _title: "In app Swap with Mosaic API",
-      description: "Swap tokens effortlessly without ever leaving the application.",
+      _title: "Borderless Access",
+      description: "Uncensorable access to decentralized finance and the broader Web3 ecosystem, anywhere in the world.",
       image: {
         url: "/Column.png",
         width: 560,
         height: 374,
-        alt: "In app Swap with Mosaic API",
+        alt: "Borderless Access",
       },
       characteristics: {
         items: [
-          { _title: "Unbeatable rates" },
-          { _title: "Instant execution" },
+          { _title: "Permissionless transactions" },
+          { _title: "Direct dApp interaction" },
         ],
       },
     },

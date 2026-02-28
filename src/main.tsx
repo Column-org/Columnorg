@@ -8,6 +8,7 @@ import { ScrollBackground } from './components/scroll-background'
 import { ErrorSuppressor } from './components/error-suppressor'
 import Home from './pages_home/page'
 import PrivacyPolicy from './pages_privacy/page'
+import CpanelPage from './pages_cpanel/page'
 
 import './styles/globals.css'
 
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/cpanel" element={<CpanelPage />} />
             </Routes>
           </main>
           {/* Footer */}

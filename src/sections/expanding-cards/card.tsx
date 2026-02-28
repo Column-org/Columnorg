@@ -18,16 +18,17 @@ export const Card = ({ title, color, image, description, index, progress }: Card
   // First card is fully visible, others are stacked behind
   const isFirstCard = index === 0;
   
-  // Stacked state properties - first card has no offset
-  const rotation = isFirstCard ? 0 : (index - 1.5) * 4;
-  const yOffset = isFirstCard ? 0 : index * 8;
-  const xOffsetInitial = isFirstCard ? 0 : index * 30 - 45;
+  // Stacked state properties - perfectly centered stacking with slight vertical drop
+  const rotation = 0; // No rotation, keeping them straight
+  const yOffset = isFirstCard ? 0 : index * -8; // Slight stack drop behind the first
+  const xOffsetInitial = isFirstCard ? 0 : index * 12; // Adjusted offset for clean peeking edge
   
   // Dynamic transforms based on expansion progress
   const currentRotation = useTransform(progress, [0, 1], [rotation, 0]);
   const currentY = useTransform(progress, [0, 1], [yOffset * -1, 0]);
   const currentX = useTransform(progress, [0, 1], [xOffsetInitial, 0]);
-  const scale = useTransform(progress, [0, 0.5], [isFirstCard ? 1 : 0.92 + index * 0.02, 1]);
+  // Smoothly scale down inner cards
+  const scale = useTransform(progress, [0, 0.5], [isFirstCard ? 1 : 1 - (index * 0.04), 1]);
 
   return (
     <motion.div
@@ -36,7 +37,7 @@ export const Card = ({ title, color, image, description, index, progress }: Card
         y: currentY,
         x: currentX,
         scale,
-        zIndex: 10 + index,
+        zIndex: 50 - index,
       }}
       className={clsx(
         "relative shrink-0 w-[calc(100vw-5rem)] h-[460px] rounded-[24px] p-6 flex flex-col gap-4 shadow-2xl overflow-hidden sm:w-[300px] sm:h-[440px] md:w-[380px] md:h-[520px] md:rounded-[40px] md:p-8 md:gap-5",

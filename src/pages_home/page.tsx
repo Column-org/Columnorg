@@ -33,7 +33,6 @@ export default function Page() {
       <PageView analyticsKey="static_page_view" />
       <Hero />
       <ExpandingCards />
-      <Companies />
       <FeaturesList />
       <FeaturesGrid />
       <Testimonials {...STATIC_TESTIMONIALS_DATA as any} />

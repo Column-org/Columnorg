@@ -24,7 +24,7 @@ export function Newsletter({ newsletter }: NewsletterProps) {
 
   return (
     <Section
-      className="bg-[--surface-secondary] !py-10 dark:bg-[--dark-surface-secondary]"
+      className="bg-transparent"
       container="full"
     >
       <div className="container mx-auto flex flex-col gap-4 px-6 lg:flex-row lg:justify-between">
