@@ -84,7 +84,7 @@ export const Header = () => {
                   <Link to="/#start-here" className="w-[calc(100%-16px)] rounded-xl px-4 py-2.5 text-left text-sm font-medium text-[--text-primary] hover:bg-[--surface-secondary] transition-colors">
                     Start here.
                   </Link>
-                  <Link to="/cpanel" className="w-[calc(100%-16px)] rounded-xl px-4 py-2.5 text-left text-sm font-medium text-[--text-primary] hover:bg-[--surface-secondary] transition-colors">
+                  <Link to="/cpanel/login" className="w-[calc(100%-16px)] rounded-xl px-4 py-2.5 text-left text-sm font-medium text-[--text-primary] hover:bg-[--surface-secondary] transition-colors">
                     Column C-Panel
                   </Link>
                 </div>
@@ -181,7 +181,7 @@ export const Header = () => {
                   <Link to="/#features" onClick={() => setIsMobileMenuOpen(false)}>Features</Link>
                   <div className="flex flex-col gap-2 pl-4">
                     <Link to="/#start-here" onClick={() => setIsMobileMenuOpen(false)} className="text-base text-[--text-secondary]">Start here.</Link>
-                    <Link to="/cpanel" onClick={() => setIsMobileMenuOpen(false)} className="text-base text-[--text-secondary]">Column C-Panel</Link>
+                    <Link to="/cpanel/login" onClick={() => setIsMobileMenuOpen(false)} className="text-base text-[--text-secondary]">Column C-Panel</Link>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2">
